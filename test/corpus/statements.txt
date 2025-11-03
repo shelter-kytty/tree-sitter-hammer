@@ -1,0 +1,38 @@
+==============
+LITERAL VALUES
+==============
+unit
+true
+false
+100
+"Hello"
+---
+(source_file
+    (expression (literal (unit)))
+    (expression (literal (boolean)))
+    (expression (literal (boolean)))
+    (expression (literal (number)))
+    (expression (literal (string))))
+===================
+FUNCTION DEFINITION
+===================
+X : Y = Y
+---
+(source_file
+    (function_definition
+        name: (identifier)
+        parameters: (parameter_list
+            (identifier))
+        body: (expression
+            (identifier))))
+
+=======================
+IF-THEN-ELSE EXPRESSION
+=======================
+if true then 1 else 2
+---
+(source_file
+    (if_statement
+        (boolean)
+        (number)
+        (number)))
