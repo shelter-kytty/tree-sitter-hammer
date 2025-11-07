@@ -1,38 +1,147 @@
 ==============
 LITERAL VALUES
 ==============
+// Hello, world!
 unit
 true
 false
 100
 "Hello"
+2 * 2
+a = 10
 ---
+
 (source_file
-    (expression (literal (unit)))
-    (expression (literal (boolean)))
-    (expression (literal (boolean)))
-    (expression (literal (number)))
-    (expression (literal (string))))
+  (comment)
+  (literal
+    (unit))
+  (literal
+    (boolean))
+  (literal
+    (boolean))
+  (literal
+    (number))
+  (literal
+    (string))
+  (binary_expression
+    (literal
+      (number))
+    (literal
+      (number)))
+  (name_definition
+    (identifier)
+    (literal
+      (number))))
+
 ===================
 FUNCTION DEFINITION
 ===================
-X : Y = Y
+F : X Y = X + Y
+_ : A B = if true then A else B
 ---
+
 (source_file
-    (function_definition
-        name: (identifier)
-        parameters: (parameter_list
-            (identifier))
-        body: (expression
-            (identifier))))
+  (function
+    (identifier)
+    (parameter_list
+      (identifier)
+      (identifier))
+    (binary_expression
+      (literal
+        (identifier))
+      (literal
+        (identifier))))
+  (lambda
+    (parameter_list
+      (identifier)
+      (identifier))
+    (if_statement
+      (literal
+        (boolean))
+      (literal
+        (identifier))
+      (literal
+        (identifier)))))
 
 =======================
 IF-THEN-ELSE EXPRESSION
 =======================
 if true then 1 else 2
 ---
+
 (source_file
-    (if_statement
-        (boolean)
-        (number)
-        (number)))
+  (if_statement
+    (literal
+      (boolean))
+    (literal
+      (number))
+    (literal
+      (number))))
+
+==============
+DECONSTRUCTION
+==============
+A, B, C = 1, 2, 3
+D, E, F = func
+---
+(source_file
+  (name_definition
+    (identifier)
+    (identifier)
+    (identifier)
+    (binary_expression
+      (literal
+        (number))
+      (binary_expression
+        (literal
+          (number))
+        (literal
+          (number)))))
+  (name_definition
+    (identifier)
+    (identifier)
+    (identifier)
+    (literal
+      (identifier))))
+===========
+APPLICATION
+===========
+f(1;2;3;)
+f(unit _:= 0)
+{1}(1)
+---
+(source_file
+    (application
+        (literal (identifier))
+        (literal (number))
+        (literal (number))
+        (literal (number)))
+    (application
+        (literal (identifier))
+        (literal (unit))
+        (lambda
+            (parameter_list)
+            (literal (number))))
+    (application
+        (block
+            (literal (number)))
+        (literal (number))))
+====================
+APPLYING EXPRESSIONS
+====================
+f(1 + 2)
+f(1, 2, 3)
+---
+(source_file
+    (application
+        (literal (identifier))
+        (binary_expression
+            (literal (number))
+            (literal (number))))
+    (application
+        (literal (identifier))
+        (binary_expression
+            (literal (number))
+            (binary_expression
+                (literal (number))
+                (literal (number))))))
