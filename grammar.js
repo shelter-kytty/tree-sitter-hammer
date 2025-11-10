@@ -10,7 +10,7 @@
 module.exports = grammar({
   name: "hammer",
 
-  // conflicts: ($) => [[$.binary_expression, $.decons]],
+  conflicts: ($) => [[$.subscript_args, $.list]],
 
   word: ($) => $.identifier,
 
@@ -48,7 +48,7 @@ module.exports = grammar({
 
     receives: ($) => prec.right(1, seq($.expression, "<<", $.expression)),
 
-    return: ($) => seq("return", $.expression),
+    return: ($) => seq(choice("return", "<-"), $.expression),
 
     expression: ($) =>
       choice(
@@ -56,6 +56,7 @@ module.exports = grammar({
         $.application,
         $.if_statement,
         $.lambda,
+        $.subscript,
         $.unary_expression,
         $.binary_expression,
         $.literal,
@@ -63,7 +64,12 @@ module.exports = grammar({
 
     block: ($) => seq("{", repeat($._statememt), "}"),
 
-    lambda: ($) => seq("_", $.parameter_list, $.expression), //lambda
+    lambda: ($) =>
+      seq(
+        field("name", alias("_", $.wildcard)),
+        field("parameters", $.parameter_list),
+        field("body", $.expression),
+      ), //lambda
 
     application: ($) =>
       prec(
@@ -72,7 +78,25 @@ module.exports = grammar({
       ),
 
     arguments: ($) =>
-      seq("(", optional(choice(";", separated_with($.expression, ";"))), ")"),
+      seq("(", optional(choice(";", separated_with($._arg_exprs, ";"))), ")"),
+
+    _arg_exprs: ($) => choice(alias("_", $.wildcard), $.expression),
+
+    subscript: ($) =>
+      prec.left(
+        14,
+        seq($.expression, "[", alias($.subscript_args, $.arguments), "]"),
+      ),
+
+    subscript_args: ($) =>
+      choice(
+        $.expression,
+        seq(
+          optional($.expression),
+          alias(":", $.pivot),
+          optional($.expression),
+        ),
+      ),
 
     unary_expression: ($) =>
       choice(

@@ -9,6 +9,7 @@ false
 "Hello"
 2 * 2
 a = 10
+f"formatted"
 ---
 
 (source_file
@@ -31,7 +32,9 @@ a = 10
   (name_definition
     (identifier)
     (literal
-      (number))))
+      (number)))
+  (literal
+      (fstring)))
 
 ===================
 FUNCTION DEFINITION
@@ -52,6 +55,7 @@ _ : A B = if true then A else B
       (literal
         (identifier))))
   (lambda
+    (wildcard)
     (parameter_list
       (identifier)
       (identifier))
@@ -142,6 +146,7 @@ f(;)
 f(1;2;3;)
 f(unit _:= 0)
 {1}(1)
+g(1;_)
 ---
 (source_file
     (application
@@ -161,13 +166,19 @@ f(unit _:= 0)
         (arguments
             (literal (unit))
             (lambda
+                (wildcard)
                 (parameter_list)
                 (literal (number)))))
     (application
         (block
             (literal (number)))
         (arguments
-        (literal (number)))))
+            (literal (number))))
+    (application
+        (literal (identifier))
+        (arguments
+            (literal (number))
+            (wildcard))))
 ====================
 APPLYING EXPRESSIONS
 ====================
@@ -193,13 +204,11 @@ f(1, 2, 3)
 LISTS AND MAPS
 ==============
 []
-[;]
 [=>]
 list = [1 2;3]
 map = ["A" => 1;"B" => 2 "C" => 3]
 ---
 (source_file
-    (literal (list))
     (literal (list))
     (literal (map))
     (name_definition
@@ -219,3 +228,38 @@ map = ["A" => 1;"B" => 2 "C" => 3]
                 (literal (number))
                 (string)
                 (literal (number))))))
+===================
+OPERATOR PRECEDENCE
+===================
+func(1,2)
+|> another_func
+|> third("param" _)
+cons 1 A()
+list[3:8]
+---
+(source_file
+    (binary_expression
+        (binary_expression
+            (application
+                (literal (identifier))
+                (arguments
+                    (binary_expression
+                        (literal (number))
+                        (literal (number)))))
+            (literal (identifier)))
+        (application
+            (literal (identifier))
+            (arguments
+                (literal (string))
+                (wildcard))))
+    (binary_expression
+        (literal (number))
+        (application
+            (literal (identifier))
+            (arguments)))
+    (subscript
+        (literal (identifier))
+        (arguments
+            (literal (number))
+            (pivot)
+            (literal (number)))))
