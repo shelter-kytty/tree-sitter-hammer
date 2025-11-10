@@ -77,14 +77,43 @@ if true then 1 else 2
       (number))
     (literal
       (number))))
-
-==============
-DECONSTRUCTION
-==============
+==========
+CONSTRUCTS
+==========
+1, 2, 3
+cons 1 cons 2 3
+cons cons 1 2 cons 3 4
 A, B, C = 1, 2, 3
-D, E, F = func
+D, E, F = func()
 ---
 (source_file
+    (binary_expression
+      (literal
+        (number))
+      (binary_expression
+        (literal
+          (number))
+        (literal
+          (number))))
+    (binary_expression
+      (literal
+        (number))
+      (binary_expression
+        (literal
+          (number))
+        (literal
+          (number))))
+    (binary_expression
+      (binary_expression
+        (literal
+          (number))
+        (literal
+          (number)))
+      (binary_expression
+        (literal
+          (number))
+        (literal
+          (number))))
   (name_definition
     (identifier)
     (identifier)
@@ -101,11 +130,15 @@ D, E, F = func
     (identifier)
     (identifier)
     (identifier)
-    (literal
-      (identifier))))
+    (application
+        (literal
+            (identifier))
+        (arguments))))
 ===========
 APPLICATION
 ===========
+f()
+f(;)
 f(1;2;3;)
 f(unit _:= 0)
 {1}(1)
@@ -113,19 +146,28 @@ f(unit _:= 0)
 (source_file
     (application
         (literal (identifier))
-        (literal (number))
-        (literal (number))
-        (literal (number)))
+        (arguments))
     (application
         (literal (identifier))
-        (literal (unit))
-        (lambda
-            (parameter_list)
+        (arguments))
+    (application
+        (literal (identifier))
+        (arguments
+            (literal (number))
+            (literal (number))
             (literal (number))))
+    (application
+        (literal (identifier))
+        (arguments
+            (literal (unit))
+            (lambda
+                (parameter_list)
+                (literal (number)))))
     (application
         (block
             (literal (number)))
-        (literal (number))))
+        (arguments
+        (literal (number)))))
 ====================
 APPLYING EXPRESSIONS
 ====================
@@ -135,13 +177,45 @@ f(1, 2, 3)
 (source_file
     (application
         (literal (identifier))
-        (binary_expression
-            (literal (number))
-            (literal (number))))
-    (application
-        (literal (identifier))
-        (binary_expression
-            (literal (number))
+        (arguments
             (binary_expression
                 (literal (number))
+                (literal (number)))))
+    (application
+        (literal (identifier))
+        (arguments
+            (binary_expression
+                (literal (number))
+                (binary_expression
+                    (literal (number))
+                    (literal (number)))))))
+==============
+LISTS AND MAPS
+==============
+[]
+[;]
+[=>]
+list = [1 2;3]
+map = ["A" => 1;"B" => 2 "C" => 3]
+---
+(source_file
+    (literal (list))
+    (literal (list))
+    (literal (map))
+    (name_definition
+        (identifier)
+        (literal
+            (list
+                (literal (number))
+                (literal (number))
+                (literal (number)))))
+    (name_definition
+        (identifier)
+        (literal
+            (map
+                (string)
+                (literal (number))
+                (string)
+                (literal (number))
+                (string)
                 (literal (number))))))

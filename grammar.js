@@ -14,26 +14,24 @@ module.exports = grammar({
 
   word: ($) => $.identifier,
 
-  externals: ($) => [$.application_params],
-
   extras: ($) => [
     /\s/, //whitespace
     $.comment,
   ],
 
+  supertypes: ($) => [$.expression],
+
   rules: {
     source_file: ($) => repeat($._statememt),
 
-    _statememt: ($) => choice($.function, $.name_definition, $._expression),
+    _statememt: ($) =>
+      choice($.function, $.name_definition, $.expression, $.receives, $.return),
 
     function: ($) =>
-      prec(
-        1,
-        seq(
-          field("name", $.identifier),
-          field("parameters", $.parameter_list),
-          field("body", $._expression),
-        ),
+      seq(
+        field("name", $.identifier),
+        field("parameters", $.parameter_list),
+        field("body", $.expression),
       ),
 
     parameter_list: ($) => seq(":", repeat($.identifier), "="),
@@ -41,10 +39,18 @@ module.exports = grammar({
     name_definition: ($) =>
       prec.right(
         1,
-        seq($.identifier, repeat(seq(",", $.identifier)), "=", $._expression),
+        seq(
+          field("name", seq($.identifier, repeat(seq(",", $.identifier)))),
+          "=",
+          field("value", $.expression),
+        ),
       ),
 
-    _expression: ($) =>
+    receives: ($) => prec.right(1, seq($.expression, "<<", $.expression)),
+
+    return: ($) => seq("return", $.expression),
+
+    expression: ($) =>
       choice(
         $.block,
         $.application,
@@ -57,48 +63,78 @@ module.exports = grammar({
 
     block: ($) => seq("{", repeat($._statememt), "}"),
 
+    lambda: ($) => seq("_", $.parameter_list, $.expression), //lambda
+
     application: ($) =>
-      prec(14, seq($._expression, "(", $.application_params, ")")),
-
-    lambda: ($) => prec(1, seq("_", $.parameter_list, $._expression)), //lambda
-
-    if_statement: ($) =>
       prec(
-        4,
-        seq("if", $._expression, "then", $._expression, "else", $._expression),
-      ), //if then else
+        14,
+        seq(field("callable", $.expression), field("args", $.arguments)),
+      ),
+
+    arguments: ($) =>
+      seq("(", optional(choice(";", separated_with($.expression, ";"))), ")"),
 
     unary_expression: ($) =>
       choice(
-        prec.left(12, seq("-", $._expression)),
-        prec.left(12, seq("!", $._expression)),
+        prec.left(12, seq("-", $.expression)),
+        prec.left(12, seq("!", $.expression)),
+        prec.left(12, seq($.expression, "?")),
+        prec.right(0, seq(choice("car", "cdr", "frst", "scnd"), $.expression)),
       ),
 
     binary_expression: ($) =>
       choice(
-        prec.left(11, seq($._expression, "^", $._expression)),
-        prec.left(10, seq($._expression, choice("*", "/", "%"), $._expression)),
-        prec.left(9, seq($._expression, choice("+", "-"), $._expression)),
+        prec.left(13, seq($.expression, "|>", $.expression)),
+        prec.left(11, seq($.expression, "^", $.expression)),
+        prec.left(10, seq($.expression, choice("*", "/", "%"), $.expression)),
+        prec.left(9, seq($.expression, choice("+", "-"), $.expression)),
         prec.left(
           8,
-          seq($._expression, choice("<", ">", "<=", ">="), $._expression),
+          seq($.expression, choice("<", ">", "<=", ">="), $.expression),
         ),
-        prec.left(7, seq($._expression, choice("==", "!="), $._expression)),
-        prec.left(6, seq($._expression, "and", $._expression)),
-        prec.left(5, seq($._expression, "or", $._expression)),
-        prec.right(3, seq($._expression, choice(".", ","), $._expression)),
+        prec.left(7, seq($.expression, choice("==", "!="), $.expression)),
+        prec.left(6, seq($.expression, "and", $.expression)),
+        prec.left(5, seq($.expression, "or", $.expression)),
+        prec.right(3, seq($.expression, choice(".", "..", ","), $.expression)),
+        seq("cons", $.expression, $.expression),
       ),
 
+    if_statement: ($) =>
+      prec(
+        4,
+        seq("if", $.expression, "then", $.expression, "else", $.expression),
+      ), //if then else
+
     literal: ($) =>
-      choice($.unit, $.number, $.boolean, $.string, $.fstring, $.identifier),
-    identifier: ($) => /[a-zA-Z]+([a-zA-Z0-9_])*/,
+      choice(
+        $.unit,
+        $.number,
+        $.boolean,
+        $.string,
+        $.fstring,
+        $.map,
+        $.list,
+        $.identifier,
+      ),
+    identifier: ($) => /[a-zA-Z]([a-zA-Z0-9_])*/,
     unit: ($) => choice("{}", "unit"),
     number: ($) => /\d+/,
     boolean: ($) => choice("true", "false"),
     string: ($) => seq('"', /[^\"]*?/, '"'),
     fstring: ($) => seq('f"', /[^\"]*?/, '"'),
+    map: ($) =>
+      choice(
+        "[=>]",
+        seq("[", separated_with(seq($.string, "=>", $.expression), ";"), "]"),
+      ),
+    list: ($) =>
+      seq("[", choice(";", optional(separated_with($.expression, ";"))), "]"),
 
     comment: ($) => token(seq("//", /.*/)),
     semicolon: ($) => ";",
   },
 });
+
+function separated_with(expr, separator) {
+  return seq(optional(separator), repeat1(seq(expr, optional(separator))));
+}
