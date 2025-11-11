@@ -42,6 +42,9 @@
 "{" @punctuation
 "}" @punctuation
 
+"=" @punctuation
+":" @punctuation
+
 (string) @string
 (fstring) @string
 
@@ -52,3 +55,5 @@
 (function name: (identifier) @function)
 (function parameters: (parameter_list (identifier)) @emphasis)
 (application callable: (literal (identifier)) @function)
+(arguments (pivot) @operator)
+(name_definition ("=") @operator)

@@ -1,2 +1,6 @@
 
 nothing_at_all : = unit
+
+a = list[1:2]
+
+help = [1;2;3;4;5]
