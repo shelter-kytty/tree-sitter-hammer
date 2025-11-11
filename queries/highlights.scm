@@ -28,6 +28,7 @@
 ">" @operator
 "!" @operator
 "?" @operator
+"in" @operator
 
 "." @operator
 ".." @operator
@@ -44,18 +45,22 @@
 
 "=" @punctuation
 ":" @punctuation
+"`" @punctuation
 
 (string) @string
 (fstring) @string
 
-(unit) @boolean
 (boolean) @boolean
 
+(wildcard) @constant
+(unit) @constant
+
 (number) @number
+
+(glyph) @function
 (function name: (identifier) @function)
 (function parameters: (parameter_list (identifier)) @emphasis)
+(lambda parameters: (parameter_list (identifier)) @emphasis)
 (application callable: (literal (identifier)) @function)
 (arguments (pivot) @operator)
 (name_definition ("=") @operator)
-
-(wildcard) @constant

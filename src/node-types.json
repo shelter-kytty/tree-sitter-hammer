@@ -101,6 +101,10 @@
         {
           "type": "expression",
           "named": true
+        },
+        {
+          "type": "glyph",
+          "named": true
         }
       ]
     }
@@ -280,11 +284,19 @@
           "named": true
         },
         {
+          "type": "glyph",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
           "type": "list",
+          "named": true
+        },
+        {
+          "type": "literal",
           "named": true
         },
         {
@@ -612,6 +624,10 @@
     "named": false
   },
   {
+    "type": "`",
+    "named": false
+  },
+  {
     "type": "and",
     "named": false
   },
@@ -649,11 +665,19 @@
     "named": false
   },
   {
+    "type": "glyph",
+    "named": true
+  },
+  {
     "type": "identifier",
     "named": true
   },
   {
     "type": "if",
+    "named": false
+  },
+  {
+    "type": "in",
     "named": false
   },
   {

@@ -709,6 +709,10 @@
                   {
                     "type": "STRING",
                     "value": ">="
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "in"
                   }
                 ]
               },
@@ -817,6 +821,27 @@
                     "value": ","
                   }
                 ]
+              },
+              {
+                "type": "SYMBOL",
+                "name": "expression"
+              }
+            ]
+          }
+        },
+        {
+          "type": "PREC_LEFT",
+          "value": 2,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "expression"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "glyph"
               },
               {
                 "type": "SYMBOL",
@@ -961,12 +986,38 @@
         {
           "type": "SYMBOL",
           "name": "identifier"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "escaped_operator"
+          },
+          "named": true,
+          "value": "literal"
         }
       ]
     },
     "identifier": {
       "type": "PATTERN",
       "value": "[a-zA-Z]([a-zA-Z0-9_])*"
+    },
+    "glyph": {
+      "type": "PATTERN",
+      "value": "[\\:\\|\\^\\*%\\+\\-!\\?><@#\\$~&\\./=\\\\]+"
+    },
+    "escaped_operator": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "`"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "glyph"
+        }
+      ]
     },
     "unit": {
       "type": "CHOICE",
@@ -983,7 +1034,7 @@
     },
     "number": {
       "type": "PATTERN",
-      "value": "\\d+"
+      "value": "\\d+(\\.\\d+)?([eE][+-]?\\d+)?"
     },
     "boolean": {
       "type": "CHOICE",

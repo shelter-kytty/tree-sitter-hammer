@@ -167,7 +167,6 @@ g(1;_)
             (literal (unit))
             (lambda
                 (wildcard)
-                (parameter_list)
                 (literal (number)))))
     (application
         (block
