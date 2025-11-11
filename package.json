@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-hammer",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "A tree-sitter parser for hammer",
   "repository": "https://github.com/shelter-kytty/tree-sitter-hammer",
   "license": "MIT",

@@ -7,4 +7,5 @@
 (function parameters: (parameter_list (identifier)) @local.definition)
 (lambda parameters: (parameter_list (identifier)) @local.definition)
 
+(function name: (identifier) @local.definition)
 (name_definition name: (identifier) @local.definition)

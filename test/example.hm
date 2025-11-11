@@ -1,5 +1,6 @@
 
-nothing_at_all : = unit
+nothing_at_all : A = unit
+_ : A = unit
 
 a = list[1:2]
 

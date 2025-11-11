@@ -57,3 +57,5 @@
 (application callable: (literal (identifier)) @function)
 (arguments (pivot) @operator)
 (name_definition ("=") @operator)
+
+(wildcard) @constant

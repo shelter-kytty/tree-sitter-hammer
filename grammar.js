@@ -30,11 +30,13 @@ module.exports = grammar({
     function: ($) =>
       seq(
         field("name", $.identifier),
-        field("parameters", $.parameter_list),
+        ":",
+        field("parameters", optional($.parameter_list)),
+        "=",
         field("body", $.expression),
       ),
 
-    parameter_list: ($) => seq(":", repeat($.identifier), "="),
+    parameter_list: ($) => repeat1($.identifier),
 
     name_definition: ($) =>
       prec.right(
@@ -68,7 +70,9 @@ module.exports = grammar({
     lambda: ($) =>
       seq(
         field("name", alias("_", $.wildcard)),
-        field("parameters", $.parameter_list),
+        ":",
+        field("parameters", optional($.parameter_list)),
+        "=",
         field("body", $.expression),
       ), //lambda
 
