@@ -228,6 +228,39 @@ map = ["A" => 1;"B" => 2 "C" => 3]
                 (literal (number))
                 (string)
                 (literal (number))))))
+=================
+MATCH EXPRESSIONS
+=================
+match 2
+| 1 => false
+| 2 => true
+| 3 => false
+match match 1 | 1 => 2 | 2 => 3
+---
+(source_file
+    (match
+        (pivot
+            (literal (number)))
+        (case
+            (literal (number))
+            (literal (boolean)))
+        (case
+            (literal (number))
+            (literal (boolean)))
+        (case
+            (literal (number))
+            (literal (boolean))))
+    (match
+        (pivot
+            (match
+                (pivot
+                    (literal (number)))
+                (case
+                    (literal (number))
+                    (literal (number)))
+                (case
+                    (literal (number))
+                    (literal (number)))))))
 ===================
 OPERATOR PRECEDENCE
 ===================

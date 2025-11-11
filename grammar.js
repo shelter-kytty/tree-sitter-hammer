@@ -55,6 +55,7 @@ module.exports = grammar({
         $.block,
         $.application,
         $.if_statement,
+        $.match,
         $.lambda,
         $.subscript,
         $.unary_expression,
@@ -128,6 +129,11 @@ module.exports = grammar({
         4,
         seq("if", $.expression, "then", $.expression, "else", $.expression),
       ), //if then else
+
+    match: ($) =>
+      prec.right(seq("match", alias($.expression, $.pivot), repeat($.case))),
+
+    case: ($) => seq("|", $.expression, "=>", $.expression),
 
     literal: ($) =>
       choice(
