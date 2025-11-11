@@ -28,6 +28,10 @@
         "named": true
       },
       {
+        "type": "match",
+        "named": true
+      },
+      {
         "type": "subscript",
         "named": true
       },
@@ -136,6 +140,21 @@
     "type": "boolean",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "case",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "fstring",
@@ -301,6 +320,25 @@
         },
         {
           "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "match",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "case",
+          "named": true
+        },
+        {
+          "type": "pivot",
           "named": true
         }
       ]
@@ -619,6 +657,10 @@
     "named": false
   },
   {
+    "type": "match",
+    "named": false
+  },
+  {
     "type": "number",
     "named": true
   },
@@ -660,6 +702,10 @@
   },
   {
     "type": "{}",
+    "named": false
+  },
+  {
+    "type": "|",
     "named": false
   },
   {

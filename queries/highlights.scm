@@ -5,6 +5,8 @@
 "if" @keyword
 "then" @keyword
 "else" @keyword
+"match" @keyword
+
 "car" @operator
 "cdr" @operator
 "frst" @operator
@@ -32,6 +34,7 @@
 
 "," @punctuation
 ";" @punctuation
+"|" @punctuation
 "(" @punctuation
 ")" @punctuation
 "[" @punctuation
