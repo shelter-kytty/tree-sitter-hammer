@@ -147,14 +147,12 @@ module.exports = grammar({
         $.boolean,
         $.string,
         $.fstring,
+        $.character,
         $.map,
         $.list,
         $.identifier,
         $.glyph,
       ),
-    identifier: ($) => /[a-zA-Z]([a-zA-Z0-9_])*/,
-    glyph: ($) => seq("`", $._operator),
-    _operator: ($) => /[\:\|\^\*%\+\-!\?><@#\$~&\.=\\/]+/,
     unit: ($) => choice("{}", "unit"),
     number: ($) => /\d+(\.\d+)?([eE][+-]?\d+)?/,
     boolean: ($) => choice("true", "false"),
@@ -175,6 +173,11 @@ module.exports = grammar({
 
     list: ($) =>
       seq("[", choice(";", optional(separated_with($.expression, ";"))), "]"),
+
+    identifier: ($) => /[a-zA-Z]([a-zA-Z0-9_])*/,
+
+    glyph: ($) => seq("`", $._operator),
+    _operator: ($) => /[\:\|\^\*%\+\-!\?><@#\$~&\.=\\/]+/,
 
     comment: ($) => token(seq("//", /.*/)),
     semicolon: ($) => ";",

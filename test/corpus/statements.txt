@@ -38,7 +38,12 @@ f"format\"ted\t"
   (literal
       (fstring
         (escape_sequence)
-        (escape_sequence))))
+        (escape_sequence)))
+  (literal
+      (character))
+  (literal
+      (character
+          (char_escape))))
 
 ===================
 FUNCTION DEFINITION

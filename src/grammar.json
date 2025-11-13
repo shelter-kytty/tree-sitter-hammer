@@ -986,6 +986,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "character"
+        },
+        {
+          "type": "SYMBOL",
           "name": "map"
         },
         {
@@ -1001,27 +1005,6 @@
           "name": "glyph"
         }
       ]
-    },
-    "identifier": {
-      "type": "PATTERN",
-      "value": "[a-zA-Z]([a-zA-Z0-9_])*"
-    },
-    "glyph": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "`"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_operator"
-        }
-      ]
-    },
-    "_operator": {
-      "type": "PATTERN",
-      "value": "[\\:\\|\\^\\*%\\+\\-!\\?><@#\\$~&\\.=\\\\/]+"
     },
     "unit": {
       "type": "CHOICE",
@@ -1355,6 +1338,27 @@
           "value": "]"
         }
       ]
+    },
+    "identifier": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z]([a-zA-Z0-9_])*"
+    },
+    "glyph": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "`"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_operator"
+        }
+      ]
+    },
+    "_operator": {
+      "type": "PATTERN",
+      "value": "[\\:\\|\\^\\*%\\+\\-!\\?><@#\\$~&\\.=\\\\/]+"
     },
     "comment": {
       "type": "TOKEN",
