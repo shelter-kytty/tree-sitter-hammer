@@ -33,6 +33,8 @@
 "." @operator
 ".." @operator
 
+"$" @operator
+
 "," @punctuation
 ";" @punctuation
 "|" @punctuation
