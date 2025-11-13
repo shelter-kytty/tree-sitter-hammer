@@ -56,6 +56,7 @@ module.exports = grammar({
       choice(
         $.block,
         $.application,
+        alias($.dollar_apply, $.application),
         $.if_statement,
         $.match,
         $.lambda,
@@ -86,6 +87,17 @@ module.exports = grammar({
       seq("(", optional(choice(";", separated_with($._arg_exprs, ";"))), ")"),
 
     _arg_exprs: ($) => choice(alias("_", $.wildcard), $.expression),
+
+    dollar_apply: ($) =>
+      prec.right(
+        14,
+        seq(
+          field("callable", $.expression),
+          "$",
+          alias(repeat($.expression), $.arguments),
+          choice(/\r?\n/, ";"),
+        ),
+      ),
 
     subscript: ($) =>
       prec.left(

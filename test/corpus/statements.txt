@@ -304,3 +304,31 @@ list[3:8]
             (literal (number))
             (pivot)
             (literal (number)))))
+===============
+DOLLAR OPERATOR
+:error ; https://github.com/tree-sitter/tree-sitter/issues/1970
+===============
+f$
+f$ 1 2 3 4 5
+f$ 1 + 1 2 * 3
+---
+(source_file
+    (application
+        (literal (identifier)))
+    (application
+        (literal (identifier))
+        (arguments
+            (literal (number))
+            (literal (number))
+            (literal (number))
+            (literal (number))
+            (literal (number))))
+    (application
+        (literal (identifier))
+        (arguments
+            (binary_expression
+                (literal (number))
+                (literal (number)))
+            (binary_expression
+                (literal (number))
+                (literal (number))))))
