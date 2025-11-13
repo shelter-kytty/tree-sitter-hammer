@@ -47,8 +47,11 @@
 ":" @punctuation
 "`" @punctuation
 
+(character) @string
+(character (char_escape) @constant)
 (string) @string
 (fstring) @string
+(fstring (escape_sequence) @constant)
 
 (boolean) @boolean
 
@@ -58,6 +61,7 @@
 (number) @number
 
 (glyph) @function
+(glyph ("`") @punctuation)
 (function name: (identifier) @function)
 (function parameters: (parameter_list (identifier)) @emphasis)
 (lambda parameters: (parameter_list (identifier)) @emphasis)

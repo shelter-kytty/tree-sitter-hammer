@@ -29,7 +29,7 @@ module.exports = grammar({
 
     function: ($) =>
       seq(
-        field("name", $.identifier),
+        field("name", choice($.identifier, $.glyph)),
         ":",
         field("parameters", optional($.parameter_list)),
         "=",
@@ -125,7 +125,7 @@ module.exports = grammar({
         prec.left(6, seq($.expression, "and", $.expression)),
         prec.left(5, seq($.expression, "or", $.expression)),
         prec.right(3, seq($.expression, choice(".", "..", ","), $.expression)),
-        prec.left(2, seq($.expression, $.glyph, $.expression)),
+        prec.left(2, seq($.expression, $._operator, $.expression)),
         seq("cons", $.expression, $.expression),
       ),
 
@@ -150,21 +150,29 @@ module.exports = grammar({
         $.map,
         $.list,
         $.identifier,
-        alias($.escaped_operator, $.literal),
+        $.glyph,
       ),
     identifier: ($) => /[a-zA-Z]([a-zA-Z0-9_])*/,
-    glyph: ($) => /[\:\|\^\*%\+\-!\?><@#\$~&\./=\\]+/,
-    escaped_operator: ($) => seq("`", $.glyph),
+    glyph: ($) => seq("`", $._operator),
+    _operator: ($) => /[\:\|\^\*%\+\-!\?><@#\$~&\.=\\/]+/,
     unit: ($) => choice("{}", "unit"),
     number: ($) => /\d+(\.\d+)?([eE][+-]?\d+)?/,
     boolean: ($) => choice("true", "false"),
     string: ($) => seq('"', /[^\"]*?/, '"'),
-    fstring: ($) => seq('f"', /[^\"]*?/, '"'),
+
+    fstring: ($) => seq('f"', repeat(choice($.escape_sequence, /[^\"]/)), '"'),
+    escape_sequence: ($) =>
+      seq("\\", choice("\\", '"', "n", "t", "b", "f", "\n")),
+
+    character: ($) => seq("'", choice($.char_escape, /[^\']/), "'"),
+    char_escape: ($) => seq("\\", choice("\\", "'", "n", "t", "b", "f", "\n")),
+
     map: ($) =>
       choice(
         "[=>]",
         seq("[", separated_with(seq($.string, "=>", $.expression), ";"), "]"),
       ),
+
     list: ($) =>
       seq("[", choice(";", optional(separated_with($.expression, ";"))), "]"),
 

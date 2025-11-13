@@ -9,7 +9,9 @@ false
 "Hello"
 2 * 2
 a = 10
-f"formatted"
+f"format\"ted\t"
+'a'
+'\n'
 ---
 
 (source_file
@@ -34,7 +36,9 @@ f"formatted"
     (literal
       (number)))
   (literal
-      (fstring)))
+      (fstring
+        (escape_sequence)
+        (escape_sequence))))
 
 ===================
 FUNCTION DEFINITION

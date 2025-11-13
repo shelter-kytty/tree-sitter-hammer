@@ -101,10 +101,6 @@
         {
           "type": "expression",
           "named": true
-        },
-        {
-          "type": "glyph",
-          "named": true
         }
       ]
     }
@@ -161,9 +157,24 @@
     }
   },
   {
-    "type": "fstring",
+    "type": "escape_sequence",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "fstring",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "function",
@@ -184,6 +195,10 @@
         "required": true,
         "types": [
           {
+            "type": "glyph",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           }
@@ -200,6 +215,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "glyph",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "if_statement",
@@ -293,10 +313,6 @@
         },
         {
           "type": "list",
-          "named": true
-        },
-        {
-          "type": "literal",
           "named": true
         },
         {
@@ -508,6 +524,10 @@
     "fields": {}
   },
   {
+    "type": "\n",
+    "named": false
+  },
+  {
     "type": "!",
     "named": false
   },
@@ -616,6 +636,10 @@
     "named": false
   },
   {
+    "type": "\\",
+    "named": false
+  },
+  {
     "type": "]",
     "named": false
   },
@@ -629,6 +653,10 @@
   },
   {
     "type": "and",
+    "named": false
+  },
+  {
+    "type": "b",
     "named": false
   },
   {
@@ -653,6 +681,10 @@
     "named": false
   },
   {
+    "type": "f",
+    "named": false
+  },
+  {
     "type": "f\"",
     "named": false
   },
@@ -663,10 +695,6 @@
   {
     "type": "frst",
     "named": false
-  },
-  {
-    "type": "glyph",
-    "named": true
   },
   {
     "type": "identifier",
@@ -682,6 +710,10 @@
   },
   {
     "type": "match",
+    "named": false
+  },
+  {
+    "type": "n",
     "named": false
   },
   {
@@ -702,6 +734,10 @@
   },
   {
     "type": "scnd",
+    "named": false
+  },
+  {
+    "type": "t",
     "named": false
   },
   {

@@ -42,8 +42,17 @@
           "type": "FIELD",
           "name": "name",
           "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "glyph"
+              }
+            ]
           }
         },
         {
@@ -841,7 +850,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "glyph"
+                "name": "_operator"
               },
               {
                 "type": "SYMBOL",
@@ -988,13 +997,8 @@
           "name": "identifier"
         },
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "escaped_operator"
-          },
-          "named": true,
-          "value": "literal"
+          "type": "SYMBOL",
+          "name": "glyph"
         }
       ]
     },
@@ -1003,10 +1007,6 @@
       "value": "[a-zA-Z]([a-zA-Z0-9_])*"
     },
     "glyph": {
-      "type": "PATTERN",
-      "value": "[\\:\\|\\^\\*%\\+\\-!\\?><@#\\$~&\\./=\\\\]+"
-    },
-    "escaped_operator": {
       "type": "SEQ",
       "members": [
         {
@@ -1015,9 +1015,13 @@
         },
         {
           "type": "SYMBOL",
-          "name": "glyph"
+          "name": "_operator"
         }
       ]
+    },
+    "_operator": {
+      "type": "PATTERN",
+      "value": "[\\:\\|\\^\\*%\\+\\-!\\?><@#\\$~&\\.=\\\\/]+"
     },
     "unit": {
       "type": "CHOICE",
@@ -1074,12 +1078,134 @@
           "value": "f\""
         },
         {
-          "type": "PATTERN",
-          "value": "[^\\\"]*?"
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "escape_sequence"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[^\\\"]"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
           "value": "\""
+        }
+      ]
+    },
+    "escape_sequence": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\\"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "\\"
+            },
+            {
+              "type": "STRING",
+              "value": "\""
+            },
+            {
+              "type": "STRING",
+              "value": "n"
+            },
+            {
+              "type": "STRING",
+              "value": "t"
+            },
+            {
+              "type": "STRING",
+              "value": "b"
+            },
+            {
+              "type": "STRING",
+              "value": "f"
+            },
+            {
+              "type": "STRING",
+              "value": "\n"
+            }
+          ]
+        }
+      ]
+    },
+    "character": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "'"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "char_escape"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^\\']"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "'"
+        }
+      ]
+    },
+    "char_escape": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\\"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "\\"
+            },
+            {
+              "type": "STRING",
+              "value": "'"
+            },
+            {
+              "type": "STRING",
+              "value": "n"
+            },
+            {
+              "type": "STRING",
+              "value": "t"
+            },
+            {
+              "type": "STRING",
+              "value": "b"
+            },
+            {
+              "type": "STRING",
+              "value": "f"
+            },
+            {
+              "type": "STRING",
+              "value": "\n"
+            }
+          ]
         }
       ]
     },
