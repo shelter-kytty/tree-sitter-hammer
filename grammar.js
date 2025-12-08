@@ -191,7 +191,7 @@ module.exports = grammar({
     glyph: ($) => seq("`", $._operator),
     _operator: ($) => /[\:\|\^\*%\+\-!\?><@#\$~&\.=\\/]+/,
 
-    comment: ($) => token(seq("//", /.*/)),
+    comment: ($) => token(seq("#", /.*/)),
     semicolon: ($) => ";",
   },
 });
